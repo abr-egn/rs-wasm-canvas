@@ -8,3 +8,8 @@ pub fn wasm_start() {
 
     info!("WASM initialized.");
 }
+
+#[wasm_bindgen]
+pub fn greet() {
+    info!("Hello.");
+}
