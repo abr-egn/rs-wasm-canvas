@@ -1,16 +1,19 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import {Index} from "../tsx/index";
+import { Index } from "../tsx/index";
 import * as wasm from "../wasm";
+import { memory } from "../wasm/index_bg";
 
 function main() {
-    initCanvas();
+    const canvas = initCanvas();
     renderReact();
-    wasm.greet();
+
+    const data = new wasm.Data();
+    window.requestAnimationFrame((ts) => drawFrame(canvas, data, ts));
 }
 
-function initCanvas() {
+function initCanvas(): HTMLCanvasElement {
     const canvas = document.getElementById("render") as HTMLCanvasElement;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -22,11 +25,29 @@ function initCanvas() {
         console.info("Key pressed: ", e.code);
     });
     canvas.focus();
+    return canvas;
 }
 
 function renderReact() {
     let element = React.createElement(Index, {}, null);
     ReactDOM.render(element, document.getElementById("root"));
+}
+
+function drawFrame(canvas: HTMLCanvasElement, data: wasm.Data, ts: number) {
+    // TODO: data.update()
+
+    const count = data.count();
+    const xs = new Float32Array(memory.buffer, data.xs(), count);
+    const ys = new Float32Array(memory.buffer, data.ys(), count);
+
+    canvas.width = canvas.width;  // clear
+    const ctx = canvas.getContext("2d")!;
+    ctx.fillStyle = "#FFFFFF";
+    for (let ix = 0; ix < count; ix++) {
+        ctx.fillRect(xs[ix], ys[ix], 5, 5);
+    }
+
+    window.requestAnimationFrame((ts) => drawFrame(canvas, data, ts));
 }
 
 main();
