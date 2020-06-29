@@ -12,35 +12,34 @@ pub fn wasm_start() {
 }
 
 #[wasm_bindgen]
-pub fn greet() {
-    info!("Hello.");
-}
-
-#[wasm_bindgen]
 pub struct Data {
     xs: Vec<f32>,
     ys: Vec<f32>,
 }
 
 const POINTS: usize = 100;
-const RADIUS: f32 = 50.0;
+const RADIUS: f32 = 200.0;
+const SPEED: f32 = 0.0001;
 
 #[wasm_bindgen]
 impl Data {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> Self {
-        let mut xs = vec![];
-        let mut ys = vec![];
-        let inc = (2.0*PI)/(POINTS as f32);
-        for ix in 0..POINTS {
-            let angle = (ix as f32) * inc;
-            xs.push(RADIUS * angle.cos());
-            ys.push(RADIUS * angle.sin());
-        }
-        Data { xs, ys }
+    pub fn new(time: f32) -> Self {
+        let mut out = Data { xs: vec![0.0; POINTS], ys: vec![0.0; POINTS] };
+        out.update(time);
+        out
     }
 
     pub fn count(&self) -> usize { self.xs.len() }
     pub fn xs(&self) -> *const f32 { self.xs.as_ptr() }
     pub fn ys(&self) -> *const f32 { self.ys.as_ptr() }
+
+    pub fn update(&mut self, time: f32) {
+        let inc = (2.0*PI)/(POINTS as f32);
+        for ix in 0..POINTS {
+            let angle = (ix as f32) * inc + (time*SPEED);
+            self.xs[ix] = RADIUS * angle.cos();
+            self.ys[ix] = RADIUS * angle.sin();
+        }
+    }
 }

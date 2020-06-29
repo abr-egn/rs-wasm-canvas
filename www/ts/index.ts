@@ -9,7 +9,7 @@ function main() {
     const canvas = initCanvas();
     renderReact();
 
-    const data = new wasm.Data();
+    const data = new wasm.Data(performance.now());
     window.requestAnimationFrame((ts) => drawFrame(canvas, data, ts));
 }
 
@@ -34,7 +34,7 @@ function renderReact() {
 }
 
 function drawFrame(canvas: HTMLCanvasElement, data: wasm.Data, ts: number) {
-    // TODO: data.update()
+    data.update(ts);
 
     const count = data.count();
     const xs = new Float32Array(memory.buffer, data.xs(), count);
@@ -43,6 +43,7 @@ function drawFrame(canvas: HTMLCanvasElement, data: wasm.Data, ts: number) {
     canvas.width = canvas.width;  // clear
     const ctx = canvas.getContext("2d")!;
     ctx.fillStyle = "#FFFFFF";
+    ctx.translate(canvas.width/2, canvas.height/2);
     for (let ix = 0; ix < count; ix++) {
         ctx.fillRect(xs[ix], ys[ix], 5, 5);
     }
