@@ -1,0 +1,45 @@
+/* Base Styles */
+
+#render {
+    background-color: black;
+    outline: none;
+}
+
+body {
+    color: white;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+div.topleft {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+div.topright {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+div.bottom {
+    position: absolute;
+    left: 50%;
+    bottom: 0px;
+    transform: translate(-50%, 0);
+}
+
+div.bottomleft {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+div.bottomright {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
