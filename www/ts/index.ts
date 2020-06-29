@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 
 import { Index } from "../tsx/index";
 import * as wasm from "../wasm";
-import { memory } from "../wasm/index_bg";
+import { memory } from "../js/mem_hack";
 
 function main() {
     const canvas = initCanvas();
