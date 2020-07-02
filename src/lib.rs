@@ -15,7 +15,8 @@ pub fn wasm_start() {
     info!("WASM initialized.");
 }
 
-struct Point {
+#[derive(Copy, Clone)]
+pub struct Point {
     x: f32,
     y: f32,
 }
@@ -33,10 +34,7 @@ const SPEED: f32 = 0.0001;
 impl Data {
     #[wasm_bindgen(constructor)]
     pub fn new(time: f32) -> Self {
-        let mut out = Data { points: vec![] };
-        for _ in 0..POINTS {
-            out.points.push(Point { x: 0.0, y: 0.0 })
-        }
+        let mut out = Data { points: vec![Point { x: 0.0, y: 0.0 }; POINTS] };
         out.update(time);
         out
     }
