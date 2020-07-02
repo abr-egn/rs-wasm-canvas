@@ -13,4 +13,5 @@ crate-type = ["cdylib"]
 console_error_panic_hook = "0.1.6"
 console_log = "0.1.2"
 log = "0.4.8"
+memoffset = "0.5"
 wasm-bindgen = { version = "0.2.63" }
