@@ -22,30 +22,11 @@ pub struct Point {
 }
 
 impl Point {
-    pub fn export() -> String {
-        let mut out = String::new();
-        out.push_str(r#"
-        export class Point {
-            private readonly _view: DataView;
-            constructor(buffer: ArrayBuffer, arrayPtr: number, ix: number) {"#);
-        out.push_str(&format!("\nconst size = {};\n", std::mem::size_of::<Point>()));
-        out.push_str(r#"
-                const offset = ix * size;
-                this._view = new DataView(buffer, arrayPtr + offset, size);
-            }
-            get x(): number {"#);
-        out.push_str(&format!("\nconst offset = {};\n", offset_of!(Point, x)));
-        out.push_str(r#"
-                return this._view.getFloat32(offset, true);
-            }
-            get y(): number {"#);
-        out.push_str(&format!("\nconst offset = {};\n", offset_of!(Point, y)));
-        out.push_str(r#"
-                return this._view.getFloat32(offset, true);
-            }
-        }
-        "#);
-        out
+    pub fn export() -> Vec<(&'static str, usize)> {
+        vec![
+            ("x", offset_of!(Point, x)),
+            ("y", offset_of!(Point, y)),
+        ]
     }
 }
 

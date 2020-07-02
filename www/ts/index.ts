@@ -4,7 +4,7 @@ import * as ReactDOM from "react-dom";
 import { Index } from "../tsx/index";
 import * as wasm from "../wasm";
 import { memory } from "../js/mem_hack";
-import { Point } from "./export";
+import { PointArray } from "./export";
 
 function main() {
     const canvas = initCanvas();
@@ -38,14 +38,14 @@ function drawFrame(canvas: HTMLCanvasElement, data: wasm.Data, ts: number) {
     data.update(ts);
 
     const count = data.count();
+    const points = new PointArray(memory.buffer, data.points(), count);
 
     canvas.width = canvas.width;  // clear
     const ctx = canvas.getContext("2d")!;
     ctx.fillStyle = "#FFFFFF";
     ctx.translate(canvas.width/2, canvas.height/2);
     for (let ix = 0; ix < count; ix++) {
-        const point = new Point(memory.buffer, data.points(), ix);
-        ctx.fillRect(point.x, point.y, 5, 5);
+        ctx.fillRect(points.x(ix), points.y(ix), 5, 5);
     }
 
     window.requestAnimationFrame((ts) => drawFrame(canvas, data, ts));
